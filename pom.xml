@@ -16,15 +16,73 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <tdlight.version>3.4.4+td.1.8.52</tdlight.version>
     <reactor.version>3.6.4</reactor.version>
-    <!-- Available classifiers (version managed by the BOM):
-         Linux  : linux_amd64_gnu_ssl1 | linux_amd64_gnu_ssl3 | linux_amd64_clang_ssl3
-                  linux_arm64_gnu_ssl1 | linux_arm64_gnu_ssl3 | linux_arm64_clang_ssl3
-                  linux_armhf_gnu_ssl1 | linux_armhf_gnu_ssl3
-                  linux_ppc64el_gnu_ssl3 | linux_riscv64_gnu_ssl3
-         Windows: windows_amd64
-         macOS  : macos_amd64 | macos_arm64 -->
-    <natives.classifier>windows_amd64</natives.classifier>
+    <!-- Default classifier – overridden by OS-detection profiles below.
+         Available classifiers (version managed by the BOM):
+           Linux  : linux_amd64_gnu_ssl1 | linux_amd64_gnu_ssl3 | linux_amd64_clang_ssl3
+                    linux_arm64_gnu_ssl1 | linux_arm64_gnu_ssl3 | linux_arm64_clang_ssl3
+                    linux_armhf_gnu_ssl1 | linux_armhf_gnu_ssl3
+                    linux_ppc64el_gnu_ssl3 | linux_riscv64_gnu_ssl3
+           Windows: windows_amd64
+           macOS  : macos_amd64 | macos_arm64 -->
+    <natives.classifier>linux_amd64_gnu_ssl3</natives.classifier>
   </properties>
+
+  <profiles>
+    <!-- Windows x86-64 -->
+    <profile>
+      <id>natives-windows</id>
+      <activation>
+        <os><family>windows</family></os>
+      </activation>
+      <properties>
+        <natives.classifier>windows_amd64</natives.classifier>
+      </properties>
+    </profile>
+
+    <!-- Linux x86-64 (OpenSSL 3, glibc) -->
+    <profile>
+      <id>natives-linux-amd64</id>
+      <activation>
+        <os><family>unix</family><arch>amd64</arch></os>
+      </activation>
+      <properties>
+        <natives.classifier>linux_amd64_gnu_ssl3</natives.classifier>
+      </properties>
+    </profile>
+
+    <!-- Linux ARM64 -->
+    <profile>
+      <id>natives-linux-arm64</id>
+      <activation>
+        <os><family>unix</family><arch>aarch64</arch></os>
+      </activation>
+      <properties>
+        <natives.classifier>linux_arm64_gnu_ssl3</natives.classifier>
+      </properties>
+    </profile>
+
+    <!-- macOS x86-64 -->
+    <profile>
+      <id>natives-macos-amd64</id>
+      <activation>
+        <os><family>mac</family><arch>x86_64</arch></os>
+      </activation>
+      <properties>
+        <natives.classifier>macos_amd64</natives.classifier>
+      </properties>
+    </profile>
+
+    <!-- macOS Apple Silicon -->
+    <profile>
+      <id>natives-macos-arm64</id>
+      <activation>
+        <os><family>mac</family><arch>aarch64</arch></os>
+      </activation>
+      <properties>
+        <natives.classifier>macos_arm64</natives.classifier>
+      </properties>
+    </profile>
+  </profiles>
 
   <repositories>
     <repository>
