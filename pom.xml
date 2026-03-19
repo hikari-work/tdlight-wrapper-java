@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.yann</groupId>
+  <artifactId>tdlight</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
+  <name>tdlight-reactor</name>
+
+  <properties>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <tdlight.version>3.4.4+td.1.8.52</tdlight.version>
+    <reactor.version>3.6.4</reactor.version>
+    <!-- Available classifiers (version managed by the BOM):
+         Linux  : linux_amd64_gnu_ssl1 | linux_amd64_gnu_ssl3 | linux_amd64_clang_ssl3
+                  linux_arm64_gnu_ssl1 | linux_arm64_gnu_ssl3 | linux_arm64_clang_ssl3
+                  linux_armhf_gnu_ssl1 | linux_armhf_gnu_ssl3
+                  linux_ppc64el_gnu_ssl3 | linux_riscv64_gnu_ssl3
+         Windows: windows_amd64
+         macOS  : macos_amd64 | macos_arm64 -->
+    <natives.classifier>windows_amd64</natives.classifier>
+  </properties>
+
+  <repositories>
+    <repository>
+      <id>mchv</id>
+      <url>https://mvn.mchv.eu/repository/mchv/</url>
+    </repository>
+  </repositories>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>it.tdlight</groupId>
+        <artifactId>tdlight-java-bom</artifactId>
+        <version>${tdlight.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <!-- TDLight Java -->
+    <dependency>
+      <groupId>it.tdlight</groupId>
+      <artifactId>tdlight-java</artifactId>
+    </dependency>
+
+    <!-- TDLight natives – version is managed by the BOM; adjust classifier via property -->
+    <dependency>
+      <groupId>it.tdlight</groupId>
+      <artifactId>tdlight-natives</artifactId>
+      <classifier>${natives.classifier}</classifier>
+    </dependency>
+
+    <!-- Project Reactor -->
+    <dependency>
+      <groupId>io.projectreactor</groupId>
+      <artifactId>reactor-core</artifactId>
+      <version>${reactor.version}</version>
+    </dependency>
+
+    <!-- Logging -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>2.0.12</version>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.5.3</version>
+    </dependency>
+
+    <!-- Test -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>5.10.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.projectreactor</groupId>
+      <artifactId>reactor-test</artifactId>
+      <version>${reactor.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.13.0</version>
+        <configuration>
+          <source>17</source>
+          <target>17</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
